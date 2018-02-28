@@ -1,0 +1,11 @@
+{
+    "name": "yofc-ng-multi-select",
+    "version": "4.0.0",
+    "description": "angular-multi-select@4.0.0 wrap",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "yofc",
+    "license": "ISC"
+}
