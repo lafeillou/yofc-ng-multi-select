@@ -123,6 +123,8 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                 // we check by looping from end of input-model
                 $scope.filteredModel = [];
                 var i = 0;
+                //get the specially designated match-key,just like "userName"
+                var matchKey = attrs.itemLabel ? attrs.itemLabel : attrs.buttonLabel;
 
                 if (typeof $scope.inputModel === 'undefined') {
                     return false;
@@ -141,27 +143,48 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
 
                         // If we set the search-key attribute, we use this loop. 
                         if (typeof attrs.searchProperty !== 'undefined' && attrs.searchProperty !== '') {
-
-                            for (var key in $scope.inputModel[i]) {
+                            if ($scope.inputLabel.labelFilter.length === 0) {
+                                for (var key in $scope.inputModel[i]) {
+                                    if (
+                                        typeof $scope.inputModel[i][key] !== 'boolean' &&
+                                        String($scope.inputModel[i][key]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0 &&
+                                        attrs.searchProperty.indexOf(key) > -1
+                                    ) {
+                                        gotData = true;
+                                        break;
+                                    }
+                                }
+                            } else {
                                 if (
-                                    typeof $scope.inputModel[i][key] !== 'boolean' &&
-                                    String($scope.inputModel[i][key]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0 &&
-                                    attrs.searchProperty.indexOf(key) > -1
+                                    typeof $scope.inputModel[i][matchKey] !== 'boolean' &&
+                                    String($scope.inputModel[i][matchKey]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0 &&
+                                    attrs.searchProperty.indexOf(matchKey) > -1
                                 ) {
                                     gotData = true;
-                                    break;
                                 }
                             }
+
                         }
                         // if there's no search-key attribute, we use this one. Much better on performance.
                         else {
-                            for (var key in $scope.inputModel[i]) {
+                            //if there's no inputLabel.labelFilter, put all item in $scope.filteredModel
+                            if ($scope.inputLabel.labelFilter.length === 0) {
+                                for (var key in $scope.inputModel[i]) {
+                                    if (
+                                        typeof $scope.inputModel[i][key] !== 'boolean' &&
+                                        String($scope.inputModel[i][key]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0
+                                    ) {
+                                        gotData = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                //if wet set search-key, only match the key just like "userName"
                                 if (
-                                    typeof $scope.inputModel[i][key] !== 'boolean' &&
-                                    String($scope.inputModel[i][key]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0
+                                    typeof $scope.inputModel[i][matchKey] !== 'boolean' &&
+                                    String($scope.inputModel[i][matchKey]).toUpperCase().indexOf($scope.inputLabel.labelFilter.toUpperCase()) >= 0
                                 ) {
                                     gotData = true;
-                                    break;
                                 }
                             }
                         }
