@@ -1,11 +1,13 @@
 {
     "name": "yofc-ng-multi-select",
-    "version": "4.0.0",
+    "version": "4.0.2",
     "description": "angular-multi-select@4.0.0 wrap",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "yofc",
-    "license": "ISC"
+    "license": "ISC",
+    "_from": "yofc-ng-multi-select@4.0.1",
+    "_resolved": "http://registry.npm.taobao.org/yofc-ng-multi-select/download/yofc-ng-multi-select-4.0.1.tgz"
 }
