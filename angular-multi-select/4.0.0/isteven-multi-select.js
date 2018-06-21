@@ -304,10 +304,10 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                     return false;
                 }
 
-                // if item is disabled, do nothing
-                if (typeof attrs.isDisabled !== 'undefined' && $scope.isDisabled === true) {
-                    return false;
-                }
+                // // if item is disabled, do nothing
+                // if (typeof attrs.isDisabled !== 'undefined' && $scope.isDisabled === true) {
+                //     return false;
+                // }
 
                 // if end group marker is clicked, do nothing
                 if (typeof item[attrs.groupProperty] !== 'undefined' && item[attrs.groupProperty] === false) {
@@ -1055,7 +1055,7 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
         '</button>' +
         // select none
         '<button type="button" class="helperButton"' +
-        'ng-disabled="isDisabled"' +
+        // 'ng-disabled="isDisabled"' +
         'ng-if="helperStatus.none"' +
         'ng-click="select( \'none\', $event );"' +
         'ng-bind-html="lang.selectNone">' +
@@ -1084,7 +1084,7 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
         '<div class="checkBoxContainer">' +
         '<div ' +
         'ng-repeat="item in filteredModel | filter:removeGroupEndMarker" class="multiSelectItem"' +
-        'ng-class="{selected: item[ tickProperty ], horizontal: orientationH, vertical: orientationV, multiSelectGroup:item[ groupProperty ], disabled:itemIsDisabled( item )}"' +
+        'ng-class="{selected: item[ tickProperty ], horizontal: orientationH, vertical: orientationV, multiSelectGroup:item[ groupProperty ]}"' +
         'ng-click="syncItems( item, $event, $index );" ' +
         'ng-mouseleave="removeFocusStyle( tabIndex );"> ' +
         // this is the spacing for grouped items
@@ -1099,7 +1099,7 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
         'ng-click="syncItems( item, $event, $index )" />' +
         // item label using ng-bind-hteml
         '<span ' +
-        'ng-class="{disabled:itemIsDisabled( item )}" ' +
+        // 'ng-class="{disabled:itemIsDisabled( item )}" ' +
         'ng-bind-html="writeLabel( item, \'itemLabel\' )">' +
         '</span>' +
         '</label>' +
