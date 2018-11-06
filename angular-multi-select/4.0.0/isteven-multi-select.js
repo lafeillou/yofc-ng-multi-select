@@ -83,8 +83,11 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                 all: true,
                 none: true,
                 reset: true,
-                filter: true
+                filter: true,
+                checked: true,
             };
+
+            $scope.checkDisabled = false;
 
             var
                 prevTabIndex = 0,
@@ -235,6 +238,24 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                                 result: filterObj
                             }
                         });
+                    }
+
+                    // set checkbox  disabled style
+                    let hasChecked = false;
+                    angular.forEach($scope.filteredModel, function(item,index) {
+                        if (typeof item !== 'undefined' && !hasChecked) {
+                            if (typeof item[$scope.tickProperty] !== 'undefined' && item[$scope.tickProperty] === true) {
+                                hasChecked = true;
+                            }
+                        }
+                    });
+
+                    if($scope.isDisabled && !hasChecked){
+                        $scope.checkDisabled = true;
+                        $scope.helperStatus.checked = false;
+                    } else {
+                        $scope.checkDisabled = false;
+                        $scope.helperStatus.checked = $scope.isDisabled ? true : false;
                     }
                 }, 0);
             };
@@ -518,6 +539,9 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                         }
                     });
                 }
+                $timeout(function(){
+                    $scope.helperStatus.checked = $scope.checkDisabled ? false : $scope.isDisabled;
+                })
             }
 
             // refresh button label
@@ -724,30 +748,55 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                 $scope.tabIndex = helperIndex;
 
                 switch (type.toUpperCase()) {
-                    case 'ALL':
-                        angular.forEach($scope.filteredModel, function(value, key) {
-                            if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
-                                if (typeof value[attrs.groupProperty] === 'undefined') {
-                                    value[$scope.tickProperty] = true;
+                    case 'CHECK':
+                        if(!$scope.helperStatus.checked) {
+                            angular.forEach($scope.filteredModel, function(value, key) {
+                                if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
+                                    if (typeof value[attrs.groupProperty] === 'undefined') {
+                                        value[$scope.tickProperty] = true;
+                                    }
                                 }
-                            }
-                        });
-                        $scope.refreshOutputModel();
-                        $scope.refreshButton();
-                        $scope.onSelectAll();
-                        break;
-                    case 'NONE':
-                        angular.forEach($scope.filteredModel, function(value, key) {
-                            if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
-                                if (typeof value[attrs.groupProperty] === 'undefined') {
-                                    value[$scope.tickProperty] = false;
+                            });
+                            $scope.refreshOutputModel();
+                            $scope.refreshButton();
+                            $scope.onSelectAll();
+                        } else {
+                            angular.forEach($scope.filteredModel, function(value, key) {
+                                if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
+                                    if (typeof value[attrs.groupProperty] === 'undefined') {
+                                        value[$scope.tickProperty] = false;
+                                    }
                                 }
-                            }
-                        });
-                        $scope.refreshOutputModel();
-                        $scope.refreshButton();
-                        $scope.onSelectNone();
+                            });
+                            $scope.refreshOutputModel();
+                            $scope.refreshButton();
+                            $scope.onSelectNone();
+                        }
                         break;
+                    // case 'ALL':
+                    //     angular.forEach($scope.filteredModel, function(value, key) {
+                    //         if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
+                    //             if (typeof value[attrs.groupProperty] === 'undefined') {
+                    //                 value[$scope.tickProperty] = true;
+                    //             }
+                    //         }
+                    //     });
+                    //     $scope.refreshOutputModel();
+                    //     $scope.refreshButton();
+                    //     $scope.onSelectAll();
+                    //     break;
+                    // case 'NONE':
+                    //     angular.forEach($scope.filteredModel, function(value, key) {
+                    //         if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
+                    //             if (typeof value[attrs.groupProperty] === 'undefined') {
+                    //                 value[$scope.tickProperty] = false;
+                    //             }
+                    //         }
+                    //     });
+                    //     $scope.refreshOutputModel();
+                    //     $scope.refreshButton();
+                    //     $scope.onSelectNone();
+                    //     break;
                     case 'RESET':
                         angular.forEach($scope.filteredModel, function(value, key) {
                             if (typeof value[attrs.groupProperty] === 'undefined' && typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
@@ -954,14 +1003,14 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
 
             // configurable button labels                       
             if (typeof attrs.translation !== 'undefined') {
-                $scope.lang.selectAll = $sce.trustAsHtml($scope.icon.selectAll + '&nbsp;&nbsp;' + $scope.translation.selectAll);
-                $scope.lang.selectNone = $sce.trustAsHtml($scope.icon.selectNone + '&nbsp;&nbsp;' + $scope.translation.selectNone);
+                // $scope.lang.selectAll = $sce.trustAsHtml($scope.icon.selectAll + '&nbsp;&nbsp;' + $scope.translation.selectAll);
+                // $scope.lang.selectNone = $sce.trustAsHtml($scope.icon.selectNone + '&nbsp;&nbsp;' + $scope.translation.selectNone);
                 $scope.lang.reset = $sce.trustAsHtml($scope.icon.reset + '&nbsp;&nbsp;' + $scope.translation.reset);
                 $scope.lang.search = $scope.translation.search;
                 $scope.lang.nothingSelected = $sce.trustAsHtml($scope.translation.nothingSelected);
             } else {
-                $scope.lang.selectAll = $sce.trustAsHtml($scope.icon.selectAll + '&nbsp;&nbsp;Select All');
-                $scope.lang.selectNone = $sce.trustAsHtml($scope.icon.selectNone + '&nbsp;&nbsp;Select None');
+                // $scope.lang.selectAll = $sce.trustAsHtml($scope.icon.selectAll + '&nbsp;&nbsp;Select All');
+                // $scope.lang.selectNone = $sce.trustAsHtml($scope.icon.selectNone + '&nbsp;&nbsp;Select None');
                 $scope.lang.reset = $sce.trustAsHtml($scope.icon.reset + '&nbsp;&nbsp;Reset');
                 $scope.lang.search = 'Search...';
                 $scope.lang.nothingSelected = 'None Selected';
@@ -1047,19 +1096,23 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
         // container of the first 3 buttons, select all, none and reset
         '<div class="line" ng-if="helperStatus.all || helperStatus.none || helperStatus.reset ">' +
         // select all
-        '<button type="button" class="helperButton"' +
-        'ng-disabled="isDisabled"' +
-        'ng-if="helperStatus.all"' +
-        'ng-click="select( \'all\', $event );"' +
-        'ng-bind-html="lang.selectAll">' +
-        '</button>' +
-        // select none
-        '<button type="button" class="helperButton"' +
+        // '<button type="button" class="helperButton"' +
         // 'ng-disabled="isDisabled"' +
-        'ng-if="helperStatus.none"' +
-        'ng-click="select( \'none\', $event );"' +
-        'ng-bind-html="lang.selectNone">' +
-        '</button>' +
+        // 'ng-if="helperStatus.all"' +
+        // 'ng-click="select( \'all\', $event );"' +
+        // 'ng-bind-html="lang.selectAll">' +
+        // '</button>' +
+        // select none
+        // '<button type="button" class="helperButton"' +
+        // // 'ng-disabled="isDisabled"' +
+        // 'ng-if="helperStatus.none"' +
+        // 'ng-click="select( \'none\', $event );"' +
+        // 'ng-bind-html="lang.selectNone">' +
+        // '</button>' +
+        '<label class="yf-checkbox h15" ng-class="{true:\'disabled-check\',false:\'\'}[checkDisabled]">'+
+        '<input type="checkbox" ng-disabled="checkDisabled" ng-model="helperStatus.checked" ng-click="select( \'check\', $event );">'+
+        '<em class="yf" ng-class="{\'checked\':helperStatus.checked&&!checkDisabled}" style="margin-top:2px;"></em>'+
+        '</label>全选'+
         // reset
         '<button type="button" class="helperButton reset"' +
         'ng-disabled="isDisabled"' +
