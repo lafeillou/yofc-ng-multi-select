@@ -241,7 +241,7 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                     }
 
                     // set checkbox  disabled style
-                    let hasChecked = false;
+                    var hasChecked = false;
                     angular.forEach($scope.filteredModel, function(item,index) {
                         if (typeof item !== 'undefined' && !hasChecked) {
                             if (typeof item[$scope.tickProperty] !== 'undefined' && item[$scope.tickProperty] === true) {
