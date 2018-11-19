@@ -749,7 +749,12 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
 
                 switch (type.toUpperCase()) {
                     case 'CHECK':
-                        if(!$scope.helperStatus.checked) {
+                        e = window.event || e;
+                        if(e){
+                            e.preventDefault();
+                        }
+                        $scope.helperStatus.checked = !$scope.helperStatus.checked;
+                        if($scope.helperStatus.checked) {
                             angular.forEach($scope.filteredModel, function(value, key) {
                                 if (typeof value !== 'undefined' && value[attrs.disableProperty] !== true) {
                                     if (typeof value[attrs.groupProperty] === 'undefined') {
@@ -1109,8 +1114,8 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
         // 'ng-click="select( \'none\', $event );"' +
         // 'ng-bind-html="lang.selectNone">' +
         // '</button>' +
-        '<label class="yf-checkbox h15" ng-class="{true:\'disabled-check\',false:\'\'}[checkDisabled]">'+
-        '<input type="checkbox" ng-disabled="checkDisabled" ng-model="helperStatus.checked" ng-click="select( \'check\', $event );">'+
+        '<label class="yf-checkbox h15" ng-class="{true:\'disabled-check\',false:\'\'}[checkDisabled]" ng-click="select( \'check\', $event );">'+
+        '<input type="checkbox" ng-disabled="checkDisabled" ng-model="helperStatus.checked">'+
         '<em class="yf" ng-class="{\'checked\':helperStatus.checked&&!checkDisabled}" style="margin-top:2px;"></em>'+
         '</label>全选'+
         // reset
