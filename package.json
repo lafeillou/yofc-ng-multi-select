@@ -1,6 +1,6 @@
 {
     "name": "yofc-ng-multi-select",
-    "version": "4.0.6",
+    "version": "4.0.7",
     "description": "angular-multi-select@4.0.0 wrap",
     "main": "index.js",
     "scripts": {
