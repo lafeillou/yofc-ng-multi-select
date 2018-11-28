@@ -539,9 +539,6 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                         }
                     });
                 }
-                $timeout(function(){
-                    $scope.helperStatus.checked = $scope.checkDisabled ? false : $scope.isDisabled;
-                })
             }
 
             // refresh button label
@@ -749,6 +746,9 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
 
                 switch (type.toUpperCase()) {
                     case 'CHECK':
+                        if($scope.isDisabled && $scope.checkDisabled) {
+                            return false;
+                        }
                         e = window.event || e;
                         if(e){
                             e.preventDefault();
