@@ -255,7 +255,7 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                         $scope.helperStatus.checked = false;
                     } else {
                         $scope.checkDisabled = false;
-                        $scope.helperStatus.checked = $scope.isDisabled ? true : false;
+                        $scope.helperStatus.checked = $scope.isDisabled ? true : (hasChecked ? true : false);
                     }
                 }, 0);
             };
@@ -490,6 +490,18 @@ angular.module('isteven-multi-select', ['ng']).directive('istevenMultiSelect', [
                 // set & remove CSS style
                 $scope.removeFocusStyle(prevTabIndex);
                 $scope.setFocusStyle($scope.tabIndex);
+
+                // reset the checkbox
+                var hasChecked = false;
+                angular.forEach($scope.filteredModel, function(item,index) {
+                    if (typeof item !== 'undefined' && !hasChecked) {
+                        if (typeof item[$scope.tickProperty] !== 'undefined' && item[$scope.tickProperty] === true) {
+                            hasChecked = true;
+                        }
+                    }
+                });
+                $scope.helperStatus.checked = hasChecked ? true : false;
+                
 
                 if (typeof attrs.selectionMode !== 'undefined' && attrs.selectionMode.toUpperCase() === 'SINGLE') {
                     // on single selection mode, we then hide the checkbox layer
